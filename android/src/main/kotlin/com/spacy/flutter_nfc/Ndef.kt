@@ -1,4 +1,4 @@
-package com.spacy.nfc_read_writer
+package com.spacy.flutter_nfc
 
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord

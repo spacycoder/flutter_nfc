@@ -1,4 +1,4 @@
-group 'com.spacy.nfc_read_writer'
+group 'com.spacy.flutter_nfc'
 version '1.0-SNAPSHOT'
 
 buildscript {

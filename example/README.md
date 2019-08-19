@@ -1,6 +1,6 @@
-# nfc_read_writer_example
+# flutter_nfc_example
 
-Demonstrates how to use the nfc_read_writer plugin.
+Demonstrates how to use the flutter_nfc plugin.
 
 ## Getting Started
 

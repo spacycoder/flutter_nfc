@@ -1,4 +1,4 @@
-package com.spacy.nfc_read_writer_example
+package com.spacy.flutter_nfc_example
 
 import android.os.Bundle
 

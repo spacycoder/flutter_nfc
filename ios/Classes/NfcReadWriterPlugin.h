@@ -1,4 +1,4 @@
 #import <Flutter/Flutter.h>
 
-@interface NfcReadWriterPlugin : NSObject<FlutterPlugin>
+@interface FlutterNfcPlugin : NSObject<FlutterPlugin>
 @end

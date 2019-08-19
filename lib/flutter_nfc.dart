@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
-import 'package:nfc_read_writer/models/nfc_data.dart';
-import 'package:nfc_read_writer/models/nfc_state.dart';
+import 'package:flutter_nfc/models/nfc_data.dart';
+import 'package:flutter_nfc/models/nfc_state.dart';
 
 const EXTERNAL_RECORD = "EXTERNAL";
 const APPLICATION_RECORD = "APPLICATION";
@@ -11,19 +11,19 @@ const MIME_RECORD = "MIME";
 const TEXT_RECORD = "TEXT";
 const URI_RECORD = "URI";
 
-class NfcReadWriter {
-  factory NfcReadWriter() {
+class FlutterNfc {
+  factory FlutterNfc() {
     if (_instance == null) {
-      final methodChannel = MethodChannel('nfc_read_writer_method_channel');
-      final eventChannel = EventChannel('nfc_read_writer_event_channel');
-      _instance = NfcReadWriter.private(methodChannel, eventChannel);
+      final methodChannel = MethodChannel('flutter_nfc_method_channel');
+      final eventChannel = EventChannel('flutter_nfc_event_channel');
+      _instance = FlutterNfc.private(methodChannel, eventChannel);
     }
     return _instance;
   }
 
-  NfcReadWriter.private(this._methodChannel, this._eventChannel);
+  FlutterNfc.private(this._methodChannel, this._eventChannel);
 
-  static NfcReadWriter _instance;
+  static FlutterNfc _instance;
 
   final MethodChannel _methodChannel;
   final EventChannel _eventChannel;

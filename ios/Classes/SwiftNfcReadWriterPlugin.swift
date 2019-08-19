@@ -1,10 +1,10 @@
 import Flutter
 import UIKit
 
-public class SwiftNfcReadWriterPlugin: NSObject, FlutterPlugin {
+public class SwiftFlutterNfcPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "nfc_read_writer", binaryMessenger: registrar.messenger())
-    let instance = SwiftNfcReadWriterPlugin()
+    let channel = FlutterMethodChannel(name: "flutter_nfc", binaryMessenger: registrar.messenger())
+    let instance = SwiftFlutterNfcPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 

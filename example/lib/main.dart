@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:nfc_read_writer_example/pages/read_example.dart';
-import 'package:nfc_read_writer_example/pages/write_example.dart';
-import 'package:nfc_read_writer/nfc_read_writer.dart';
-import 'package:nfc_read_writer/models/nfc_state.dart';
+import 'package:flutter_nfc_example/pages/read_example.dart';
+import 'package:flutter_nfc_example/pages/write_example.dart';
+import 'package:flutter_nfc/flutter_nfc.dart';
+import 'package:flutter_nfc/models/nfc_state.dart';
 
 
 void main() => runApp(MyApp());
@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
   }
 
   getNfcState() async {
-    _nfcStatus = await NfcReadWriter().nfcState;
+    _nfcStatus = await FlutterNfc().nfcState;
   }
 
   @override

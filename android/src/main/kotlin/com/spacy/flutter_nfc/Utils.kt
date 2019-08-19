@@ -1,4 +1,4 @@
-package com.spacy.nfc_read_writer
+package com.spacy.flutter_nfc
 
 import android.content.Intent
 import android.nfc.NfcAdapter

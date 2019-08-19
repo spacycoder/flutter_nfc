@@ -1,8 +1,8 @@
-#import "NfcReadWriterPlugin.h"
-#import <nfc_read_writer/nfc_read_writer-Swift.h>
+#import "FlutterNfcPlugin.h"
+#import <flutter_nfc/flutter_nfc-Swift.h>
 
-@implementation NfcReadWriterPlugin
+@implementation FlutterNfcPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  [SwiftNfcReadWriterPlugin registerWithRegistrar:registrar];
+  [SwiftFlutterNfcPlugin registerWithRegistrar:registrar];
 }
 @end

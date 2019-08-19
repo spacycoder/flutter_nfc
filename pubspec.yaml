@@ -1,4 +1,4 @@
-name: nfc_read_writer
+name: flutter_nfc
 description: A new flutter plugin project.
 version: 0.0.1
 author:
@@ -25,8 +25,8 @@ flutter:
   # be modified. They are used by the tooling to maintain consistency when
   # adding or updating assets for this project.
   plugin:
-    androidPackage: com.spacy.nfc_read_writer
-    pluginClass: NfcReadWriterPlugin
+    androidPackage: com.spacy.flutter_nfc
+    pluginClass: FlutterNfcPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

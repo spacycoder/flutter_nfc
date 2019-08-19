@@ -1,4 +1,4 @@
-package com.spacy.nfc_read_writer
+package com.spacy.flutter_nfc
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -19,9 +19,9 @@ const val METHOD_START_WRITE = "startNfcWrite"
 const val METHOD_CANCEL_WRITE = "cancelNfcWrite"
 
 const val READER_FLAGS = NfcAdapter.FLAG_READER_NFC_A + NfcAdapter.FLAG_READER_NFC_B + NfcAdapter.FLAG_READER_NFC_V + NfcAdapter.FLAG_READER_NFC_F
-const val PLUGIN_TAG = "NfcReadWriterPlugin"
+const val PLUGIN_TAG = "FlutterNfcPlugin"
 
-class NfcReadWriterPlugin(registrar: Registrar) : MethodCallHandler, EventChannel.StreamHandler, NfcAdapter.ReaderCallback {
+class FlutterNfcPlugin(registrar: Registrar) : MethodCallHandler, EventChannel.StreamHandler, NfcAdapter.ReaderCallback {
 	private val activity = registrar.activity()
 	private var eventSink: EventSink? = null
 	private var nfcAdapter: NfcAdapter? = null
@@ -34,10 +34,10 @@ class NfcReadWriterPlugin(registrar: Registrar) : MethodCallHandler, EventChanne
 		@JvmStatic
 		fun registerWith(registrar: Registrar) {
 			Log.d(PLUGIN_TAG, "call: registerWith")
-			val instance = NfcReadWriterPlugin(registrar)
+			val instance = FlutterNfcPlugin(registrar)
 			instance.checkIfStartedWithNfc()
-			val methodChannel = MethodChannel(registrar.messenger(), "nfc_read_writer_method_channel")
-			val eventChannel = EventChannel(registrar.messenger(), "nfc_read_writer_event_channel")
+			val methodChannel = MethodChannel(registrar.messenger(), "flutter_nfc_method_channel")
+			val eventChannel = EventChannel(registrar.messenger(), "flutter_nfc_event_channel")
 			eventChannel.setStreamHandler(instance)
 			methodChannel.setMethodCallHandler(instance)
 		}

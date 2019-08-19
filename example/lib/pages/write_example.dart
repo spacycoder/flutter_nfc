@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:nfc_read_writer/nfc_read_writer.dart';
+import 'package:flutter_nfc/flutter_nfc.dart';
 import 'dart:convert';
 
 class WriteExample extends StatefulWidget {
@@ -43,7 +43,7 @@ class _WriteExampleState extends State<WriteExample> {
           isWriting = false;
         });
         try {
-          await NfcReadWriter().stopNfcWriting();
+          await FlutterNfc().stopNfcWriting();
         } catch (e) {
           print(e);
         }
@@ -60,11 +60,11 @@ class _WriteExampleState extends State<WriteExample> {
           isWriting = true;
         });
         try {
-          await NfcReadWriter().startNfcWriting([
-            /* NfcReadWriter.createTextRecord("this is some random text"), */
-           /*  NfcReadWriter.createExternal("com.example.app", "apptype", bytes), */
-            /* NfcReadWriter.createApplicationRecord("com.example.app"), */
-            NfcReadWriter.createMime("text/plain", bytes)
+          await FlutterNfc().startNfcWriting([
+            FlutterNfc.createTextRecord("this is some random text"),
+           /*  FlutterNfc.createExternal("com.example.app", "apptype", bytes), */
+           FlutterNfc.createApplicationRecord("com.example.app"),
+           /*  FlutterNfc.createMime("text/plain", bytes) */
           ]);
         } catch (e) {
           print(e);

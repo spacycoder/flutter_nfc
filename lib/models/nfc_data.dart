@@ -1,4 +1,4 @@
-import 'package:nfc_read_writer/models/nfc_message.dart';
+import 'package:flutter_nfc/models/nfc_message.dart';
 
 class NfcData {
   NfcData({

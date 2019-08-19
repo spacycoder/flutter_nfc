@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:nfc_read_writer/nfc_read_writer.dart';
+import 'package:flutter_nfc/flutter_nfc.dart';
 
 class ReadExample extends StatefulWidget {
   @override
@@ -43,7 +43,7 @@ class _ReadExampleState extends State<ReadExample> {
                         setState(() {
                           isReading = true;
                         });
-                        subscription = NfcReadWriter().listenForNfc.listen((onData) {
+                        subscription = FlutterNfc().listenForNfc.listen((onData) {
                           print("error: " + onData?.error);
                           setState(() {
                             records = onData.message?.payload ?? [];
