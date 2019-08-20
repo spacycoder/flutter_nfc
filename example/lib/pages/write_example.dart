@@ -61,10 +61,10 @@ class _WriteExampleState extends State<WriteExample> {
         });
         try {
           await FlutterNfc().startNfcWriting([
-            FlutterNfc.createTextRecord("this is some random text"),
-           /*  FlutterNfc.createExternal("com.example.app", "apptype", bytes), */
-           FlutterNfc.createApplicationRecord("com.example.app"),
-           /*  FlutterNfc.createMime("text/plain", bytes) */
+            FlutterNfc.createTextRecord("https://www.google.com"),
+            FlutterNfc.createExternal("example.com", "apptype", bytes),
+            FlutterNfc.createApplicationRecord("com.spacy.flutter_nfc_example"),
+            FlutterNfc.createMime("text/plain", bytes)
           ]);
         } catch (e) {
           print(e);

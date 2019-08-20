@@ -5,8 +5,19 @@ import 'package:flutter_nfc_example/pages/write_example.dart';
 import 'package:flutter_nfc/flutter_nfc.dart';
 import 'package:flutter_nfc/models/nfc_state.dart';
 
+void main() {
 
-void main() => runApp(MyApp());
+  runApp(MyApp());
+}
+
+bool startedWithSomething = false;
+
+void checkStartup() async {
+  final res = await FlutterNfc().nfcStartedWith;
+  if (res != null) {
+    startedWithSomething = true;
+  }
+}
 
 class MyApp extends StatelessWidget {
    @override
@@ -78,7 +89,11 @@ class _HomeState extends State<Home> {
               SizedBox(
                 height: 10.0,
               ),
-              Center(child: Text(_nfcStatus?.toString() ?? ""))
+              Center(child: Text(_nfcStatus?.toString() ?? "")),
+               SizedBox(
+                height: 10.0,
+              ),
+               Center(child: Text(startedWithSomething ? "STARTED WITH NFC" : "NOT STARTED WITH NFC")),
             ],
           ),
         ),

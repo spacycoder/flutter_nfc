@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_nfc/flutter_nfc.dart';
+import 'package:flutter_nfc/models/nfc_record.dart';
 
 class ReadExample extends StatefulWidget {
   @override
@@ -12,7 +13,7 @@ class _ReadExampleState extends State<ReadExample> {
   bool isReading = false;
   StreamSubscription subscription;
 
-  List<String> records = []; 
+  List<NfcRecord> records = []; 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,13 +47,13 @@ class _ReadExampleState extends State<ReadExample> {
                         subscription = FlutterNfc().listenForNfc.listen((onData) {
                           print("error: " + onData?.error);
                           setState(() {
-                            records = onData.message?.payload ?? [];
+                            records = onData.message?.records ?? [];
                           });
                         });
                       },
                       child: Text("START READING"),
                     ),
-                    ...records.map((record) => Text(record)).toList()
+                    ...records.map((record) => Text("payload: ${record.payload}; type: ${record.type}; recordType: ${record.getRecordType()}")).toList()
             ],
           ),
         ),

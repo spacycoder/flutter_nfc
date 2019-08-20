@@ -16,7 +16,7 @@ import android.util.Log
 private const val KEY_ERROR = "error"
 private const val KEY_MESSAGE = "message"
 private const val KEY_ID = "id"
-private const val KEY_PAYLOAD = "payload"
+private const val KEY_RECORDS = "records"
 private const val KEY_TECH_LIST = "techList"
 
 fun ndefToMap(tag: Tag?): Map<String, Any?> {
@@ -25,17 +25,17 @@ fun ndefToMap(tag: Tag?): Map<String, Any?> {
 		val id = bytesToString(tag?.id)
 		val techList = tag?.techList?.toList()
 		val records = getRecords(ndef.cachedNdefMessage)
-		val message = mapOf(KEY_ID to id, KEY_PAYLOAD to records, KEY_TECH_LIST to techList)
+		val message = mapOf(KEY_ID to id, KEY_RECORDS to records, KEY_TECH_LIST to techList)
 		mapOf(KEY_ERROR to "", KEY_MESSAGE to message)
 	} catch (e: Exception) {
 		mapOf(KEY_ERROR to "Cannot parse NDEF message: $e", KEY_MESSAGE to null)
 	}
 }
 
-fun getRecords(message: NdefMessage?): List<String> {
-	var payload = listOf(String())
+fun getRecords(message: NdefMessage?): List<Map<String, Any?>> {
+	var payload: List<Map<String, Any?>> = listOf()
 	if (message == null) return payload
-	payload = message.records.map { r -> recordToString(r) }
+	payload = message.records.map { r -> recordToMap(r) }
 	return payload
 }
 
@@ -53,7 +53,57 @@ fun getRecords(message: NdefMessage?): List<String> {
      * Bits 5 to 0 are the length of the IANA language code.
 */
 // https://developer.android.com/reference/android/nfc/NdefRecord.html
-fun recordToString(record: NdefRecord): String {
+fun recordToMap(record: NdefRecord): Map<String, Any?> {
+	val tnf = record.tnf.toShort()
+	when(tnf) {
+		NdefRecord.TNF_EMPTY -> {
+			Log.d(PLUGIN_TAG, "type: Empty Record; type: " + String(record.type))
+			return mapOf("id" to String(record.id), "tnf" to "Empty Record", "type" to String(record.type), "payload" to "")
+		}
+		NdefRecord.TNF_WELL_KNOWN -> {
+			Log.d(PLUGIN_TAG, "type: Well-Known Record; type: " + String(record.type))
+			val payload = record.payload
+			// Get the Text Encoding
+			val textEncoding: String = if((payload[0].toInt() and 128) == 0) {
+				"UTF-8"
+			} else {
+				"UTF-16"
+			}
+
+			// Get the Language Code
+			val languageCodeLength: Int = payload[0].toInt() and 63
+			val recordString = String(payload, languageCodeLength + 1, payload.size - languageCodeLength - 1, Charset.forName(textEncoding))
+			return mapOf("id" to String(record.id),"tnf" to tnf.toInt(), "type" to String(record.type), "payload" to recordString)
+		}
+		NdefRecord.TNF_MIME_MEDIA -> {
+			Log.d(PLUGIN_TAG, "type: media; type: " + String(record.type))
+			return mapOf("id" to String(record.id),"tnf" to tnf.toInt(), "type" to String(record.type), "payload" to String(record.payload))
+		}
+		NdefRecord.TNF_ABSOLUTE_URI -> {
+			Log.d(PLUGIN_TAG, "type: URI; type: " + String(record.type))
+			return mapOf("id" to String(record.id),"tnf" to tnf.toInt(), "type" to String(record.type), "payload" to record.toUri().toString())
+		}
+		NdefRecord.TNF_EXTERNAL_TYPE -> {
+			Log.d(PLUGIN_TAG, "type: external; type: " + String(record.type))
+			return mapOf("id" to String(record.id),"tnf" to tnf.toInt(), "type" to String(record.type), "payload" to String(record.payload))
+		}
+		NdefRecord.TNF_UNKNOWN -> {
+			Log.d(PLUGIN_TAG, "type: UNKNOWN; type: " + String(record.type))
+			return mapOf("id" to String(record.id),"tnf" to tnf.toInt(), "type" to String(record.type), "payload" to String(record.payload))
+		}
+		NdefRecord.TNF_UNCHANGED -> {
+			Log.d(PLUGIN_TAG, "type: Unchanged; type: " + String(record.type))
+			return mapOf("id" to String(record.id),"tnf" to tnf.toInt(), "type" to String(record.type), "payload" to String(record.payload))
+		}
+		else -> {
+			Log.d(PLUGIN_TAG, "type: UNKNOWN" + String.format("%02X", record.getTnf()))
+			return mapOf("id" to String(record.id), "tnf" to NdefRecord.TNF_UNKNOWN.toInt(), "type" to String(record.type), "payload" to String(record.payload))
+		}
+	}
+	/* return "test"
+	Log.d(PLUGIN_TAG, "type: " + String(record.type))
+
+	Log.d(PLUGIN_TAG, "mimeType: " + record.toMimeType())
 	if (record.toUri() != null) {
 		return record.toUri().toString()
 	}
@@ -67,7 +117,9 @@ fun recordToString(record: NdefRecord): String {
 
     // Get the Language Code
     val languageCodeLength: Int = payload[0].toInt() and 63
-	return String(payload, languageCodeLength + 1, payload.size - languageCodeLength - 1, Charset.forName(textEncoding))
+	val recordString = String(payload, languageCodeLength + 1, payload.size - languageCodeLength - 1, Charset.forName(textEncoding))
+	Log.d(PLUGIN_TAG, "record: " + recordString)
+	return recordString */
 }
 
 // reference: https://dzone.com/articles/nfc-android-read-ndef-tag
