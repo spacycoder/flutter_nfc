@@ -7,6 +7,9 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.EventChannel.EventSink
+import io.flutter.plugin.common.PluginRegistry;
+
+import android.content.Intent;
 import android.util.Log
 import android.nfc.Tag
 import android.nfc.NfcAdapter
@@ -21,7 +24,7 @@ const val METHOD_CANCEL_WRITE = "cancelNfcWrite"
 const val READER_FLAGS = NfcAdapter.FLAG_READER_NFC_A + NfcAdapter.FLAG_READER_NFC_B + NfcAdapter.FLAG_READER_NFC_V + NfcAdapter.FLAG_READER_NFC_F
 const val PLUGIN_TAG = "FlutterNfcPlugin"
 
-class FlutterNfcPlugin(registrar: Registrar) : MethodCallHandler, EventChannel.StreamHandler, NfcAdapter.ReaderCallback {
+class FlutterNfcPlugin(registrar: Registrar) : MethodCallHandler, EventChannel.StreamHandler, NfcAdapter.ReaderCallback, PluginRegistry.NewIntentListener {
 	private val activity = registrar.activity()
 	private var eventSink: EventSink? = null
 	private var nfcAdapter: NfcAdapter? = null
@@ -35,9 +38,9 @@ class FlutterNfcPlugin(registrar: Registrar) : MethodCallHandler, EventChannel.S
 		fun registerWith(registrar: Registrar) {
 			Log.d(PLUGIN_TAG, "call: registerWith")
 			val instance = FlutterNfcPlugin(registrar)
-			instance.checkIfStartedWithNfc()
 			val methodChannel = MethodChannel(registrar.messenger(), "flutter_nfc_method_channel")
 			val eventChannel = EventChannel(registrar.messenger(), "flutter_nfc_event_channel")
+			registrar.addNewIntentListener(instance)
 			eventChannel.setStreamHandler(instance)
 			methodChannel.setMethodCallHandler(instance)
 		}
@@ -62,7 +65,7 @@ class FlutterNfcPlugin(registrar: Registrar) : MethodCallHandler, EventChannel.S
 			}
 			METHOD_GET_NFC_STARTED_WITH -> {
 				val intent = activity.intent
-				result.success(getActivityNfcStartupData(intent))
+				result.success(nfcMessageStartedWith)
 			}
 			METHOD_START_WRITE -> {
 				nfcWriteResult = result
@@ -149,6 +152,17 @@ class FlutterNfcPlugin(registrar: Registrar) : MethodCallHandler, EventChannel.S
 			nfcAdapter?.enableReaderMode(activity, this, READER_FLAGS, null)
 		}
 	}
+	
+    override fun onNewIntent(intent: Intent): Boolean {
+		Log.d(PLUGIN_TAG, "call: onNewIntent")
+		nfcMessageStartedWith = getActivityNfcStartupData(intent)
+        if (nfcMessageStartedWith == null) {
+			Log.d(PLUGIN_TAG, "onNewIntent: false")
+			return false
+		}
+		Log.d(PLUGIN_TAG, "onNewIntent: true")
+        return true
+    }
 
 	private fun nfcReaderStop() {
 		Log.d(PLUGIN_TAG, "call: nfcReaderStop")

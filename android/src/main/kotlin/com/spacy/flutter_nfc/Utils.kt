@@ -31,8 +31,9 @@ fun getNfcState(adapter: NfcAdapter?): String {
 
 fun getActivityNfcStartupData(intent: Intent): Map<String, Any?>? {
 	val action = intent.action ?: return null
-
+	Log.d(PLUGIN_TAG, "action $action")
 	val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
+
 	when (action) {
 		NfcAdapter.ACTION_NDEF_DISCOVERED -> {
 			val message = ndefToMap(tag)

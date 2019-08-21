@@ -40,17 +40,17 @@ fun getRecords(message: NdefMessage?): List<Map<String, Any?>> {
 }
 
 /*
-     * payload[0] contains the "Status Byte Encodings" field, per the
-     * NFC Forum "Text Record Type Definition" section 3.2.1.
-     *
-     * bit7 is the Text Encoding Field.
-     *
-     * if (Bit_7 == 0): The text is encoded in UTF-8 if (Bit_7 == 1):
-     * The text is encoded in UTF16
-     *
-     * Bit_6 is reserved for future use and must be set to zero.
-     *
-     * Bits 5 to 0 are the length of the IANA language code.
+    * payload[0] contains the "Status Byte Encodings" field, per the
+    * NFC Forum "Text Record Type Definition" section 3.2.1.
+    *
+    * bit7 is the Text Encoding Field.
+    *
+    * if (Bit_7 == 0): The text is encoded in UTF-8 if (Bit_7 == 1):
+    * The text is encoded in UTF16
+    *
+    * Bit_6 is reserved for future use and must be set to zero.
+    *
+    * Bits 5 to 0 are the length of the IANA language code.
 */
 // https://developer.android.com/reference/android/nfc/NdefRecord.html
 fun recordToMap(record: NdefRecord): Map<String, Any?> {

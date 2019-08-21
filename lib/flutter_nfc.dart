@@ -49,7 +49,7 @@ class FlutterNfc {
   }
 
   /// Start writing to nfc tag. Will resolve when it has successfully written to a tag.
-  /// If it fails it will throw an error 
+  /// If it fails it will throw an error
   Future<dynamic> startNfcWriting(List<Map<String, dynamic>> records) {
     return _methodChannel
         .invokeMethod<dynamic>('startNfcWrite', {"records": records});
@@ -73,7 +73,12 @@ class FlutterNfc {
   /// domain-spesific [type] of data. And [data] which is the payload in bytes
   static Map<String, dynamic> createExternal(
       String domain, String type, Uint8List data) {
-    return {"recordType": EXTERNAL_RECORD, "type": type, "domain": domain, "data": data};
+    return {
+      "recordType": EXTERNAL_RECORD,
+      "type": type,
+      "domain": domain,
+      "data": data,
+    };
   }
 
   /// Create a new NDEF Record containing MIME data.
@@ -87,9 +92,8 @@ class FlutterNfc {
   }
 
   /// Create a new NDEF record containing UTF-8 text data.
-  /// The caller can either specify the [languageCode] for the provided [text], 
+  /// The caller can either specify the [languageCode] for the provided [text],
   /// or otherwise the language code corresponding to the current default locale will be used.
-  /// Reference specification: NFCForum-TS-RTD_Text_1.0
   static Map<String, dynamic> createTextRecord(String text,
       {String languageCode}) {
     return {
